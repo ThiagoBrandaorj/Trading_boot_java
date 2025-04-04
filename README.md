@@ -24,25 +24,11 @@ Cria um novo usuário.
 **`GET /users/{user_id}`**
 Retorna um usuário existente.
 
-### **3. Atualizar Usuário**
-**`PUT /users/{user_id}`**
-Atualiza um usuário existente.
-
-**Request Body (JSON):**
-```json
-{
-    "login": "novo_login",
-    "password": "nova_senha",
-    "binanceApiKey": "nova_api_key",
-    "binanceSecretKey": "nova_secret_key",
-    "saldoInicio": 1000.0
-}
-```
-### **4. Obter Usuários**
+### **3. Obter Usuários**
 **`GET /users`**
 Retorna todos os usuários existentes.
 
-### **5. Cadastrar Configuração de Usuário**
+### **4. Cadastrar Configuração de Usuário**
 **`POST /users/{user_id}/configurations`**
 Adiciona configurações de trade para um usuário.
 
@@ -55,7 +41,7 @@ Adiciona configurações de trade para um usuário.
 }
 ```
 
-### **6. Cadastrar TrackingTickers de Usuáio**
+### **5. Cadastrar TrackingTickers de Usuáio**
 **`POST /users/{user_id}/tracked-tickers`**
 Adiciona tracking tickers(moedas de rastreio) para um usuário.
 

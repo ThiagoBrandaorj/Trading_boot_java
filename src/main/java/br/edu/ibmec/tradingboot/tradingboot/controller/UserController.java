@@ -9,6 +9,7 @@ import br.edu.ibmec.tradingboot.tradingboot.repository.UserTrackingTickerReposit
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -104,5 +105,25 @@ public class UserController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(savedTicker);
+    }
+
+    @Transactional
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable Integer userId) {
+        try {
+            return userRepository.findById(userId)
+                    .map(user -> {
+                        userConfigRepository.deleteAll(user.getConfigurations());
+                        tickerRepository.deleteAll(user.getTrackingTickers());
+                        userRepository.delete(user);
+
+                        return ResponseEntity.ok().build();
+                    })
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error deleting user: " + e.getMessage());
+        }
     }
 }
