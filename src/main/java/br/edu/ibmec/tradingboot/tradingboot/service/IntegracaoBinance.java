@@ -1,48 +1,39 @@
 package br.edu.ibmec.tradingboot.tradingboot.service;
 
-import org.springframework.http.*;
+import com.binance.connector.client.SpotClient;
+import com.binance.connector.client.impl.SpotClientImpl;
+import lombok.Data;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import java.util.*;
+
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
-public class IntegracaoBinance{
-    private String baseUrl = "https://testnet.binance.vision/api/v3";
+@Data
+public class IntegracaoBinance {
+    private String baseUrl = "https://testnet.binance.vision";
     private String apiKey;
     private String secretKey;
-    private RestTemplate restTemplate = new RestTemplate();
 
+    // Método para obter tickers
     public String getTickers(List<String> symbols) {
-        String symbolParam = String.join(",", symbols);
-        String url = baseUrl + "/ticker/price?symbols=[" + symbolParam + "]";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-MBX-APIKEY", apiKey);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
-
-        return response.getBody();
+        SpotClient client = new SpotClientImpl(this.apiKey, this.secretKey, this.baseUrl);
+        Map<String, Object> parameters = new LinkedHashMap<>();
+        parameters.put("symbols", symbols); // A biblioteca aceita diretamente a lista de símbolos
+        String result = client.createMarket().ticker(parameters);
+        return result;
     }
 
+    // Método para criar uma ordem de mercado
     public String createMarketOrder(String symbol, double quantity, String side) {
-        String url = baseUrl + "/order";
-        long timestamp = System.currentTimeMillis();
-
+        SpotClient client = new SpotClientImpl(this.apiKey, this.secretKey, this.baseUrl);
         Map<String, Object> parameters = new LinkedHashMap<>();
         parameters.put("symbol", symbol);
         parameters.put("side", side);
         parameters.put("type", "MARKET");
         parameters.put("quantity", quantity);
-        parameters.put("timestamp", timestamp);
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-MBX-APIKEY", apiKey);
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(parameters, headers);
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
-
-        return response.getBody();
+        String result = client.createTrade().newOrder(parameters);
+        return result;
     }
 }
