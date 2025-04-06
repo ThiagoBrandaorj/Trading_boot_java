@@ -74,12 +74,17 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
 
+        User user = userRepository.findById(userId).orElseThrow();
+        if (!user.getConfigurations().isEmpty()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Usuário já possui uma configuração, delete a configuração existente para adcionar outra.");
+        }
+
         UserConfiguration savedConfig = userConfigRepository.save(config);
 
-        userRepository.findById(userId).ifPresent(user -> {
-            user.getConfigurations().add(savedConfig);
-            userRepository.save(user);
-        });
+        user.getConfigurations().add(savedConfig);
+        userRepository.save(user);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)

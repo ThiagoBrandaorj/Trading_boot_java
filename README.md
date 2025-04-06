@@ -30,7 +30,7 @@ Retorna todos os usuários existentes.
 
 ### **4. Cadastrar Configuração de Usuário**
 **`POST /users/{user_id}/configurations`**
-Adiciona configurações de trade para um usuário.
+Adiciona configurações de trade para um usuário, caso o mesmo não possua nenhuma configuração.
 
 **Request Body (JSON):**
 ```json
@@ -51,3 +51,7 @@ Adiciona tracking tickers(moedas de rastreio) para um usuário.
     "symbol": "BTCUSDT"
 }
 ```
+
+### **6. Deletar Usuário**
+**`DELETE /users/{user_id}`**
+Deleta um usuário existente.
