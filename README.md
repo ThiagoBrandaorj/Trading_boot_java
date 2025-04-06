@@ -55,3 +55,17 @@ Adiciona tracking tickers(moedas de rastreio) para um usuário.
 ### **6. Deletar Usuário**
 **`DELETE /users/{user_id}`**
 Deleta um usuário existente.
+### **7. Cadastrar TrackingTickers de Usuáio**
+**`POST /users/{user_id}/order`**
+Adiciona tracking tickers(moedas de rastreio) para um usuário.
+
+**Request Body (JSON):**
+```json
+{
+   {
+  "symbol": "BTCUSDT",
+  "side": "BUY/SELL",
+  "quantity": 0.001
+}
+}
+```
