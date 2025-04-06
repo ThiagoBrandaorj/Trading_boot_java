@@ -62,10 +62,10 @@ Adiciona tracking tickers(moedas de rastreio) para um usuário.
 **Request Body (JSON):**
 ```json
 {
-   {
+   
   "symbol": "BTCUSDT",
   "side": "BUY/SELL",
   "quantity": 0.001
 }
-}
+
 ```
