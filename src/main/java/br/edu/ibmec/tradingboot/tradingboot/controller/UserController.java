@@ -6,6 +6,8 @@ import br.edu.ibmec.tradingboot.tradingboot.model.UserTrackingTicker;
 import br.edu.ibmec.tradingboot.tradingboot.repository.UserConfigurationRepository;
 import br.edu.ibmec.tradingboot.tradingboot.repository.UserRepository;
 import br.edu.ibmec.tradingboot.tradingboot.repository.UserTrackingTickerRepository;
+import br.edu.ibmec.tradingboot.tradingboot.service.IntegracaoBinance;
+import br.edu.ibmec.tradingboot.tradingboot.request.OrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -131,4 +133,8 @@ public class UserController {
                     .body("Error deleting user: " + e.getMessage());
         }
     }
+    @Autowired
+    private IntegracaoBinance binanceService; // ou troque pelo nome correto
+
+
 }
