@@ -55,7 +55,7 @@ Adiciona tracking tickers(moedas de rastreio) para um usuário.
 ### **6. Deletar Usuário**
 **`DELETE /users/{user_id}`**
 Deleta um usuário existente.
-### **7. Ordem de Compra e Venda*
+### **7. Order deCompra e Venda**
 **`POST /users/{user_id}/order`**
 Adiciona tracking tickers(moedas de rastreio) para um usuário.
 
