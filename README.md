@@ -1,7 +1,7 @@
 # API de Usuários - TradingBoot
 
 Endpoints para gerenciamento de usuários, configurações e tickers monitorados.
-João Pedro Menezes, Breno França, Thiago Brandão
+#João Pedro Menezes, Breno França, Thiago Brandão
 ---
 
 ## **Rotas Disponíveis**
