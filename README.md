@@ -1,7 +1,6 @@
 # API de Usuários - TradingBoot
 
 Endpoints para gerenciamento de usuários, configurações e tickers monitorados.
-
 ---
 
 ## **Rotas Disponíveis**
@@ -57,7 +56,7 @@ Adiciona tracking tickers(moedas de rastreio) para um usuário.
 Deleta um usuário existente.
 ### **7. Ordem de Compra e Venda**
 **`POST /users/{user_id}/order`**
-Adiciona tracking tickers(moedas de rastreio) para um usuário.
+Ordem de compra/venda.
 
 **Request Body (JSON):**
 ```json
@@ -69,3 +68,5 @@ Adiciona tracking tickers(moedas de rastreio) para um usuário.
 }
 
 ```
+Integrantes:
+João Pedro Menezes, Breno França, Thiago Brandão
