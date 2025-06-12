@@ -1,43 +1,39 @@
 package br.edu.ibmec.tradingboot.tradingboot.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
+
 import java.util.List;
-import java.util.ArrayList;
 
 @Data
 @Entity
-@Table(name = "user") // É uma boa prática especificar o nome da tabela
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    @Column(unique = true, nullable = false)
+    @Column
     private String login;
 
-    @Column(nullable = false)
+    @Column
     private String password;
 
+    @Column
     private String binanceApiKey;
+
+    @Column
     private String binanceSecretKey;
+
+    @Column
     private Double saldoInicio;
 
-    // RELAÇÃO CORRIGIDA COM UserOrderReport
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference("user-report-ref") // O "pai" da relação
-    private List<UserOrderReport> orderReports = new ArrayList<>();
+    @OneToMany
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id")
+    private List<UserConfiguration> configurations;
 
-    // RELAÇÃO COM UserConfiguration (não precisa de anotações JSON se não houver referência de volta)
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id") // Ligação através da chave estrangeira
-    private List<UserConfiguration> configurations = new ArrayList<>();
-
-    // RELAÇÃO COM UserTrackingTicker (não precisa de anotações JSON se não houver referência de volta)
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "user_id") // Ligação através da chave estrangeira
-    private List<UserTrackingTicker> trackingTickers = new ArrayList<>();
-
+    @OneToMany
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id")
+    private List<UserTrackingTicker> trackingTickers;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserOrderReport> orderReports;
 }

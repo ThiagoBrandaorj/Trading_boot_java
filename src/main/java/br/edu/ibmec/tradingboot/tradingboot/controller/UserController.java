@@ -9,15 +9,13 @@ import br.edu.ibmec.tradingboot.tradingboot.repository.UserTrackingTickerReposit
 import br.edu.ibmec.tradingboot.tradingboot.service.IntegracaoBinance;
 import br.edu.ibmec.tradingboot.tradingboot.request.OrderRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import br.edu.ibmec.tradingboot.tradingboot.response.UserDTO;
-import java.util.stream.Collectors;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@CrossOrigin(origins = "http://localhost") 
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -34,25 +32,16 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> registerNewUser(@RequestBody User newUser) {
         try {
-        // Salva o novo utilizador no banco de dados
-        User savedUser = userRepository.save(newUser);
-
-        // Cria um DTO para a resposta
-        UserDTO responseDto = new UserDTO();
-        responseDto.setId(savedUser.getId());
-        responseDto.setLogin(savedUser.getLogin());
-
-        // Retorna o DTO, que é um objeto limpo e seguro para serializar
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(responseDto);
-
+            User savedUser = userRepository.save(newUser);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(savedUser);
         } catch (Exception e) {
             return ResponseEntity
-                .badRequest()
-                .body("Error creating user: " + e.getMessage());
+                    .badRequest()
+                    .body("Error creating user: " + e.getMessage());
+        }
     }
-}
 
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable Integer userId) {
@@ -62,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getUsers() {
+    public ResponseEntity<List<User>> getUsers() {
         try {
             List<User> users = userRepository.findAll();
 
@@ -70,19 +59,8 @@ public class UserController {
                 return ResponseEntity.noContent().build();
             }
 
-            // Mapeia a lista de User para uma lista de UserDTO
-            List<UserDTO> userDTOs = users.stream().map(user -> {
-                UserDTO dto = new UserDTO();
-                dto.setId(user.getId());
-                dto.setLogin(user.getLogin());
-                return dto;
-            }).collect(Collectors.toList());
-
-            // Retorna a lista de DTOs, que é segura para serializar
-            return ResponseEntity.ok(userDTOs);
-
+            return ResponseEntity.ok(users);
         } catch (Exception e) {
-            // Este bloco de erro continua o mesmo
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(null);
