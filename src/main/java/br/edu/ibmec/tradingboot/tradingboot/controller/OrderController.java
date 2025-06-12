@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
-
+@CrossOrigin(origins = "*") 
 @RestController
 @RequestMapping("/users/{id}/order")
 public class OrderController {
