@@ -34,13 +34,13 @@ jobs:
       - name: Login to Azure Container Registry
         uses: azure/docker-login@v1
         with:
-          login-server: tradingbotweb.azurecr.io
-          username: tradingbotweb
-          password: yEErniz3reuQc0HN/CWL5XLZPc9W4gauM4e5EWVyBJ+ACRCincUT
+          login-server: ibmectradingbot.azurecr.io
+          username: ibmectradingbot
+          password: MMmLuO2+SrAkXmago26al28yVvvcrGt1tQHd+Lr20y+ACRD1gr3O
 
       - name: Build, Tag, and Push Docker image
         run: |
           docker-compose build
-          docker tag trading_boot_java-app tradingbotweb.azurecr.io/tradingbotweb:latest
-          docker push tradingbotweb.azurecr.io/tradingbotweb:latest
+          docker tag trading_boot_java-app ibmectradingbot.azurecr.io/tradingbot:v2
+          docker push ibmectradingbot.azurecr.io/tradingbot:v2
 
