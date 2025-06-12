@@ -1,5 +1,5 @@
 # Nome do Workflow
-name: Build, Push to ACR, and Deploy to Web App
+name: Build and Push Docker image to ACR
 
 on:
   push:
@@ -8,12 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Este job único irá construir, enviar e fazer o deploy
-  build_push_and_deploy:
+  build_and_push:
     runs-on: ubuntu-latest
-    permissions:
-      id-token: write # ADICIONADO: Permissão para autenticação segura com o Azure
-      contents: read  # Permissão para fazer o checkout do código
 
     steps:
       - name: Checkout repository
@@ -40,30 +36,11 @@ jobs:
         with:
           login-server: tradingbotweb.azurecr.io
           username: tradingbotweb
-          password: yEErniz3reuQc0HN/CWL5XLZPc9W4gauM4e5EWVyBJ+ACRCincUT # Senha exposta conforme solicitado
+          password: yEErniz3reuQc0HN/CWL5XLZPc9W4gauM4e5EWVyBJ+ACRCincUT
 
       - name: Build, Tag, and Push Docker image
         run: |
-          # 1. Constrói a imagem usando docker-compose. O nome será 'trading_boot_java-app'
           docker-compose build
-          
-          # 2. Renomeia a imagem para o formato do seu ACR.
           docker tag trading_boot_java-app tradingbotweb.azurecr.io/tradingbotweb:latest
-          docker tag trading_boot_java-app tradingbotweb.azurecr.io/tradingbotweb:${{ github.sha }}
+          docker push tradingbotweb.azurecr.io/tradingbotweb:latest
 
-          # 3. Envia as duas tags (latest e a do commit) para o ACR
-          docker push tradingbotweb.azurecr.io/tradingbotweb --all-tags
-      
-      - name: Login to Azure (for Web App deployment)
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_C93D11F8BC624F43A0B9DF3815648FC2 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_62146FC7112248A68D4083DD786ECCB2 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E3136949EC064D5BB78F9746507600F5 }}
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'tradingboot' 
-          slot-name: 'Production'
-          images: 'tradingbotweb.azurecr.io/tradingbotweb:${{ github.sha }}'
