@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/performance")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost")
 public class PerformanceController {
 
     @Autowired

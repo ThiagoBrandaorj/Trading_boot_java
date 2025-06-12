@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-@CrossOrigin(origins = "*") 
+@CrossOrigin(origins = "http://localhost")
 @RestController
 @RequestMapping("/users/{id}/tickers")
 public class TickerController {
