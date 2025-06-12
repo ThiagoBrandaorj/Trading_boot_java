@@ -11,6 +11,9 @@ jobs:
   # Este job único irá construir, enviar e fazer o deploy
   build_push_and_deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # ADICIONADO: Permissão para autenticação segura com o Azure
+      contents: read  # Permissão para fazer o checkout do código
 
     steps:
       - name: Checkout repository
@@ -44,12 +47,12 @@ jobs:
           # 1. Constrói a imagem usando docker-compose. O nome será 'trading_boot_java-app'
           docker-compose build
           
-          # 2. Renomeia a imagem para o formato do seu ACR. **Esta é a linha corrigida.**
-          docker tag trading_boot_java-app tradingbotweb.azurecr.io/tradingboot:latest
-          docker tag trading_boot_java-app tradingbotweb.azurecr.io/tradingboot:${{ github.sha }}
+          # 2. Renomeia a imagem para o formato do seu ACR.
+          docker tag trading_boot_java-app tradingbotweb.azurecr.io/tradingbotweb:latest
+          docker tag trading_boot_java-app tradingbotweb.azurecr.io/tradingbotweb:${{ github.sha }}
 
           # 3. Envia as duas tags (latest e a do commit) para o ACR
-          docker push tradingbotweb.azurecr.io/tradingboot --all-tags
+          docker push tradingbotweb.azurecr.io/tradingbotweb --all-tags
       
       - name: Login to Azure (for Web App deployment)
         uses: azure/login@v2
@@ -61,6 +64,6 @@ jobs:
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
-          app-name: 'tradingboot' # CORRIGIDO: Este é o nome do seu Web App no Azure
+          app-name: 'tradingboot' 
           slot-name: 'Production'
-          images: 'tradingbotweb.azurecr.io/tradingboot:${{ github.sha }}'
+          images: 'tradingbotweb.azurecr.io/tradingbotweb:${{ github.sha }}'
